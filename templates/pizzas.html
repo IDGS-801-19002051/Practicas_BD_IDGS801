@@ -1,0 +1,150 @@
+<!-- INDEX -->
+{% extends "layout2.html" %}
+{% block content %}
+{% from "_macros.html" import camposNuevos %}
+
+<div class="container-fluid">
+  <form name="sent" action="/pizzas" id="contactForm" method="POST">
+    <div class="row">
+
+      <div class="col-span">
+        {{camposNuevos(form.nombre, class='form-control')}}
+      </div>
+      <div class="col-span">
+        {{camposNuevos(form.direccion, class='form-control')}}
+      </div>
+      <div class="col-span">
+        {{camposNuevos(form.telefono, class='form-control')}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-span">
+        {{camposNuevos(form.tamaño, class='form-control')}}
+      </div>
+      <div class="col-span">
+        {{camposNuevos(form.ingredientes, class='form-control')}}
+      </div>
+      <div class="col-span">
+        <div class="row">{{camposNuevos(form.numero, class='form-control')}}</div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row"><input type="submit" class="btn btn success" id="agregar" name="agregar"></div>
+      </div>
+      <div class="col-span">
+        {{camposNuevos(form.id, class='form-control')}}
+      </div>
+    </div>
+  </form>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-span-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>tamaño</th>
+            <th>ingredientes</th>
+            <th>numpizzas</th>
+            <th>subtotal</th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {%for pizza in pizzaq%}
+          <tr>
+            <td>{% if pizza.tamaño == 40 %}
+              Chica
+              {% elif pizza.tamaño == 80 %}
+              Mediana
+              {% else %}
+              Grande
+              {% endif %}</td>
+            <td>{{pizza.ingredientesv}}</td>
+            <td>{{pizza.numpizzas}}</td>
+            <td>{{(pizza.tamaño+pizza.ingredientes)*pizza.numpizzas}}</td>
+
+            <td> <a href="eliminarpizza?id={{pizza.id}}" class="btn btn-danger">Eliminar</a></td>
+            <td> <a href="pizzas?id={{pizza.id}}" class="btn btn-warning">Modificar</a></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+      <form name="sent" action="/pizzasguardar" id="contactForm" method="POST"
+        onsubmit="return confirm('El total sera de {{total}} ¿Confirmar pedido?')">
+        {{camposNuevos(form2.total, class='form-control', value=total)}}
+        {{camposNuevos(form2.nombre, class='form-control', value=nombre)}}
+        {{camposNuevos(form2.fecha, class='form-control')}}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="submit" class="btn btn success" id="terminar" name="agregar" value="Terminar">
+      </form>
+    </div>
+    <div class="row">
+      <form name="sent" action="/pizzas" id="contactForm" method="GET">
+        <div class="col-span"><input type="radio" id="dia" name="tiempo" value="1" {{tiempo}}>
+          <label for="dia">Día</label>
+          <input type="search" name="dia" id="dia" value="{{dia}}">
+        </div>
+        <div class="col-span"><input type="radio" id="mes" name="tiempo" value="2" {{tiempo2}}>
+          <label for="mes">Mes</label>
+          <input type="search" name="mes" id="mes" value="{{mes}}">
+        </div>
+        <div class="col-span">
+          <input type="submit" value="buscar">
+        </div>
+      </form>
+      <div class="col-span" id="tablaDia">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>nombre</th>
+              <th>total</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {%for regs in reg%}
+            <tr>
+              <td>{{regs.nombre}}</td>
+              <td>{{regs.total}}</td>
+            </tr>
+            {%endfor%}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Total:</th>
+              <th>{{total2}}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="col-span" id="tablaMes" style="display: none;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>nombre</th>
+              <th>total</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {%for regs in reg2%}
+            <tr>
+              <td>{{regs.nombre}}</td>
+              <td>{{regs.total}}</td>
+            </tr>
+            {%endfor%}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Total:</th>
+              <th>{{total3}}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

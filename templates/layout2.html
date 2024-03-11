@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
   <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../static/bootstrap/css/bootstrap-responsive.min.css">
+
   <style>
     body {
       padding-top: 60px;
@@ -14,7 +16,7 @@
       background: #dff0d8;
     }
   </style>
-  <link rel="stylesheet" href="../static/bootstrap/css/bootstrap-responsive.min.css" />
+
 </head>
 
 <body>
@@ -56,5 +58,45 @@
     {%endblock%}
   </div>
 </body>
+<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script>
+  window.onload = function () {
+    var total = document.getElementById('total');
+    var boton = document.getElementById('terminar');
+
+    function checkInput() {
+      if (total.value > 0) {
+        boton.disabled = false;
+      } else {
+        boton.disabled = true;
+      }
+    }
+
+    // Comprobar el valor inicial al cargar la página
+    checkInput();
+
+    // Comprobar el valor cada vez que cambia
+    total.addEventListener('input', checkInput);
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Tu código aquí
+    document.querySelectorAll('input[name="tiempo"]').forEach((elem) => {
+      // Verifica si el radio botón está seleccionado
+      if (elem.checked) {
+        document.getElementById('tablaDia').style.display = (elem.id == 'dia' ? 'block' : 'none');
+        document.getElementById('tablaMes').style.display = (elem.id == 'mes' ? 'block' : 'none');
+      }
+
+      // Agrega el evento change a cada radio botón
+      elem.addEventListener("change", function (event) {
+        console.log('JavaScript cargado');
+        document.getElementById('tablaDia').style.display = (event.target.id == 'dia' ? 'block' : 'none');
+        document.getElementById('tablaMes').style.display = (event.target.id == 'mes' ? 'block' : 'none');
+      });
+    });
+  });
+
+</script>
 
 </html>
